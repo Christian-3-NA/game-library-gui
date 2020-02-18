@@ -13,10 +13,23 @@ TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
 
 #===[ Class(es) ]===
-class MainMenu(tk.Frame):
+class Screen(tk.Frame):
+    
+    current = 0
     
     def __init__(self):
         tk.Frame.__init__(self)
+        
+        
+class MainMenu(Screen):
+    
+    def __init__(self):
+        Screen.__init__(self)
+        
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+        
         self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
@@ -34,12 +47,12 @@ class MainMenu(tk.Frame):
         
         self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT)
         self.btn_save.grid(row=5,column=1)  
-        
+    
 
-class SearchMenu(tk.Frame):
+class SearchMenu(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -123,10 +136,10 @@ class PrintFilters(tk.Frame):
         self.chk_notes.grid(row=3,column=2,sticky="nsw")           
         
 
-class FileSaved(tk.Frame):
+class FileSaved(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -139,10 +152,10 @@ class FileSaved(tk.Frame):
         self.btn_edit_confirm.grid(row=1,column=1)
         
         
-class ChooseEdit(tk.Frame):
+class ChooseEdit(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -164,10 +177,10 @@ class ChooseEdit(tk.Frame):
         self.btn_edit_choose.grid(row=2,column=2,sticky="news")   
         
         
-class EditGame(tk.Frame):
+class AddEdit(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -177,66 +190,65 @@ class EditGame(tk.Frame):
         #self.lbl_title = tk.Label(self,text="Search", font=TITLE_FONT)
         #self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
-        self.lbl_search_by = tk.Label(self,text="Genre:")
-        self.lbl_search_by.grid(row=0,column=0,sticky="sw")
+        self.lbl_edit_genre = tk.Label(self,text="Genre:")
+        self.lbl_edit_genre.grid(row=0,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=0,column=1,sticky="nw")
+        self.ent_edit_genre = tk.Entry(self)
+        self.ent_edit_genre.grid(row=0,column=1,sticky="nw")
         
-        self.lbl_search_by = tk.Label(self,text="Title:")
-        self.lbl_search_by.grid(row=0,column=2,sticky="sw")
+        self.lbl_edit_title = tk.Label(self,text="Title:")
+        self.lbl_edit_title.grid(row=0,column=2,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=0,column=3,sticky="nw")
+        self.ent_edit_title = tk.Entry(self)
+        self.ent_edit_title.grid(row=0,column=3,sticky="nw")
         
-        self.lbl_search_by = tk.Label(self,text="Developer:")
-        self.lbl_search_by.grid(row=1,column=0,sticky="sw")
+        self.lbl_edit_developer = tk.Label(self,text="Developer:")
+        self.lbl_edit_developer.grid(row=1,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=1,column=1,sticky="nw") 
+        self.ent_edit_developer = tk.Entry(self)
+        self.ent_edit_developer.grid(row=1,column=1,sticky="nw") 
         
-        self.lbl_search_by = tk.Label(self,text="Publisher:")
-        self.lbl_search_by.grid(row=1,column=2,sticky="sw")
+        self.lbl_edit_publisher = tk.Label(self,text="Publisher:")
+        self.lbl_edit_publisher.grid(row=1,column=2,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=1,column=3,sticky="nw")   
+        self.ent_edit_publisher = tk.Entry(self)
+        self.ent_edit_publisher.grid(row=1,column=3,sticky="nw")   
         
-        self.lbl_search_by = tk.Label(self,text="System:")
-        self.lbl_search_by.grid(row=2,column=0,sticky="sw")
+        self.lbl_edit_system = tk.Label(self,text="System:")
+        self.lbl_edit_system.grid(row=2,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=2,column=1,sticky="nw") 
+        self.ent_edit_system = tk.Entry(self)
+        self.ent_edit_system.grid(row=2,column=1,sticky="nw") 
         
-        self.lbl_search_by = tk.Label(self,text="Release Date:")
-        self.lbl_search_by.grid(row=2,column=2,sticky="sw")
+        self.lbl_edit_release = tk.Label(self,text="Release Date:")
+        self.lbl_edit_release.grid(row=2,column=2,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=2,column=3,sticky="nw")        
+        self.ent_edit_release = tk.Entry(self)
+        self.ent_edit_release.grid(row=2,column=3,sticky="nw")        
         
-        self.lbl_search_by = tk.Label(self,text="Rating:")
-        self.lbl_search_by.grid(row=3,column=0,sticky="sw")
+        self.lbl_edit_rating = tk.Label(self,text="Rating:")
+        self.lbl_edit_rating.grid(row=3,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=3,column=1,sticky="nw")
+        self.ent_edit_rating = tk.Entry(self)
+        self.ent_edit_rating.grid(row=3,column=1,sticky="nw")
         
-        self.lbl_search_by = tk.Label(self,text="Price:")
-        self.lbl_search_by.grid(row=3,column=2,sticky="sw")
+        self.lbl_edit_price = tk.Label(self,text="Price:")
+        self.lbl_edit_price.grid(row=3,column=2,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=3,column=3,sticky="nw")  
+        self.ent_edit_price = tk.Entry(self)
+        self.ent_edit_price.grid(row=3,column=3,sticky="nw")  
         
-        self.lbl_search_by = tk.Label(self,text="Purchase Date:")
-        self.lbl_search_by.grid(row=4,column=0,sticky="sw")
+        self.lbl_edit_purchase = tk.Label(self,text="Purchase Date:")
+        self.lbl_edit_purchase.grid(row=4,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=4,column=1,sticky="nw")        
+        self.ent_edit_purchase = tk.Entry(self)
+        self.ent_edit_purchase.grid(row=4,column=1,sticky="nw")        
         
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.chk_beaten.grid(row=4,column=2,sticky="nsw")  
         
-        self.chk_title = tk.Checkbutton(self,text="Beaten?")
-        self.chk_title.grid(row=4,column=2,sticky="nsw")  
-        
-        self.lbl_search_by = tk.Label(self,text="Game Modes:")
-        self.lbl_search_by.grid(row=5,column=0,sticky="sw")
+        self.lbl_edit_mode = tk.Label(self,text="Game Modes:")
+        self.lbl_edit_mode.grid(row=5,column=0,sticky="sw")
         
         options = ["One Player", "Two Player", "Three", "Four Player"]
         self.tkvar = tk.StringVar(self)
@@ -244,11 +256,11 @@ class EditGame(tk.Frame):
         self.menu = tk.OptionMenu(self, self.tkvar, *options)
         self.menu.grid(row = 5, column = 1)          
         
-        self.lbl_search_by = tk.Label(self,text="Notes:")
-        self.lbl_search_by.grid(row=6,column=0,sticky="sw") 
+        self.lbl_edit_notes = tk.Label(self,text="Notes:")
+        self.lbl_edit_notes.grid(row=6,column=0,sticky="sw") 
         
-        self.scr_delete = ScrolledText(self,width=40,height=8)
-        self.scr_delete.grid(row=7,column=0,columnspan=3,sticky="news") 
+        self.scr_add_edit = ScrolledText(self,width=40,height=8)
+        self.scr_add_edit.grid(row=7,column=0,columnspan=3,sticky="news") 
         
         self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT)
         self.btn_back.grid(row=8,column=0,sticky="news")
@@ -257,13 +269,13 @@ class EditGame(tk.Frame):
         self.btn_reset.grid(row=8,column=1,sticky="news")
         
         self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT)
-        self.btn_submit.grid(row=8,column=2,sticky="news")        
+        self.btn_submit.grid(row=8,column=2,sticky="news")
         
         
-class ChooseRemove(tk.Frame):
+class ChooseRemove(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -285,10 +297,10 @@ class ChooseRemove(tk.Frame):
         self.btn_remove_choose.grid(row=2,column=2,sticky="news") 
         
               
-class ConfirmRemove(tk.Frame):
+class ConfirmRemove(Screen):
     
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -308,27 +320,9 @@ class ConfirmRemove(tk.Frame):
         
         self.btn_remove_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT)
         self.btn_remove_confirm.grid(row=3,column=2,sticky="news")         
-        
-                
-'''class App(tk.Frame):
-    
-    def __init__(self):
-        tk.Frame.__init__(self)
-        self.btn_one = 
-
-
-class OptFrame(tk.Frame):
-    
-    def __init__(self):
-        tk.Frame__init__(self)
-        options = ["one", "two"]
-        self.tkvar = tk.StringVar(self)
-        tkvar.set(options[0])
-        self.menu = tk.options_menu(self, self.tkvar, * options)
-        self.menu.grid(row = 0, column = 0)'''
+                  
 
 #===[ Global Function(s) ]===
-
 
 #===[ Main ]===
 if __name__ == "__main__":
@@ -342,9 +336,7 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    main_menu = MainMenu()
-    main_menu.grid(row=0,column=0,sticky="news")
-    
+    '''
     search_menu = SearchMenu()
     search_menu.grid(row=0,column=0,sticky="news")
     
@@ -354,15 +346,29 @@ if __name__ == "__main__":
     choose_edit = ChooseEdit()
     choose_edit.grid(row=0,column=0,sticky="news")    
     
-    edit_game = EditGame()
-    edit_game.grid(row=0,column=0,sticky="news")
+    add_edit = AddEdit()
+    add_edit.grid(row=0,column=0,sticky="news")
     
     choose_remove = ChooseRemove()
     choose_remove.grid(row=0,column=0,sticky="news")   
     
     confirm_remove = ConfirmRemove()
-    confirm_remove.grid(row=0,column=0,sticky="news")    
-   
+    confirm_remove.grid(row=0,column=0,sticky="news")  
     
-    edit_game.tkraise()
+    main_menu = MainMenu()
+    main_menu.grid(row=0,column=0,sticky="news")'''
+    
+    
+    screens = [MainMenu(), SearchMenu(), FileSaved(), ChooseEdit(), AddEdit(), ChooseRemove(), ConfirmRemove()]
+    screens[0].grid(row=0,column=0,sticky="news")
+    screens[1].grid(row=0,column=0,sticky="news")
+    screens[2].grid(row=0,column=0,sticky="news")
+    screens[3].grid(row=0,column=0,sticky="news")
+    screens[4].grid(row=0,column=0,sticky="news")
+    screens[5].grid(row=0,column=0,sticky="news")
+    screens[6].grid(row=0,column=0,sticky="news")    
+   
+   
+    screens[0].tkraise()
+    #main_menu.tkraise()
     root.mainloop()
