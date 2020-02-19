@@ -56,8 +56,16 @@ class MainMenu(Screen):
         Screen.switch_frame()
         
     def go_edit(self):
-        Screen.current=3
-        Screen.switch_frame()
+        self.pop_up = tk.Tk()
+        self.pop_up.title("Edit")
+        
+        frm_edit_list=ChooseEdit(pop_up)
+        frm_edit_list.grid(row=0,column=0,sticky="news")
+        
+        #screens[3].tkraise()
+        
+        #Screen.current=3
+        #Screen.switch_frame()
         
     def go_search(self):
         Screen.current=1
@@ -183,14 +191,14 @@ class FileSaved(Screen):
         Screen.switch_frame()     
         
         
-class ChooseEdit(Screen):
+class ChooseEdit(tk.Frame):
     
-    def __init__(self):
-        Screen.__init__(self)
+    def __init__(self, parent):
+        tk.Frame.__init__(self,master=parent)
         
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
+        #self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)
+        #self.grid_columnconfigure(2, weight=1)
         
         self.lbl_edit_ask = tk.Label(self,text="Which Title to Edit?", font=TITLE_FONT)
         self.lbl_edit_ask.grid(row=0,column=0,columnspan=3,sticky="news")
@@ -395,15 +403,15 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    screens = [MainMenu(), SearchMenu(), FileSaved(), ChooseEdit(), AddEdit(), ChooseRemove(), ConfirmRemove()]
+    screens = [MainMenu(), SearchMenu(), FileSaved(), ChooseEdit(None), AddEdit(), ChooseRemove(), ConfirmRemove()]
     screens[0].grid(row=0,column=0,sticky="news")
     screens[1].grid(row=0,column=0,sticky="news")
     screens[2].grid(row=0,column=0,sticky="news")
-    screens[3].grid(row=0,column=0,sticky="news")
+    #screens[3].grid(row=0,column=0,sticky="news")
     screens[4].grid(row=0,column=0,sticky="news")
     screens[5].grid(row=0,column=0,sticky="news")
     screens[6].grid(row=0,column=0,sticky="news")    
-   
-   
+    
+    
     screens[0].tkraise()
     root.mainloop()
