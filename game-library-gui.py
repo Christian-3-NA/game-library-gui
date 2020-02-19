@@ -20,6 +20,9 @@ class Screen(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
         
+    def switch_frame():
+        screens[Screen.current].tkraise()
+        
         
 class MainMenu(Screen):
     
@@ -33,21 +36,41 @@ class MainMenu(Screen):
         self.lbl_title = tk.Label(self,text="Game Library", font=TITLE_FONT)
         self.lbl_title.grid(row=0,column=0,columnspan=3,sticky="news")
         
-        self.btn_add = tk.Button(self,text="Add",font=BUTTON_FONT)
+        self.btn_add = tk.Button(self,text="Add",font=BUTTON_FONT,command=self.go_add)
         self.btn_add.grid(row=1,column=1)
         
-        self.btn_edit = tk.Button(self,text="Edit",font=BUTTON_FONT)
+        self.btn_edit = tk.Button(self,text="Edit",font=BUTTON_FONT,command=self.go_edit)
         self.btn_edit.grid(row=2,column=1) 
         
-        self.btn_search = tk.Button(self,text="Search",font=BUTTON_FONT)
+        self.btn_search = tk.Button(self,text="Search",font=BUTTON_FONT,command=self.go_search)
         self.btn_search.grid(row=3,column=1)
         
-        self.btn_remove = tk.Button(self,text="Remove",font=BUTTON_FONT)
+        self.btn_remove = tk.Button(self,text="Remove",font=BUTTON_FONT,command=self.go_remove_choose)
         self.btn_remove.grid(row=4,column=1)
         
-        self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT)
+        self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT,command=self.go_save)
         self.btn_save.grid(row=5,column=1)  
     
+    def go_add(self):
+        Screen.current=4
+        Screen.switch_frame()
+        
+    def go_edit(self):
+        Screen.current=3
+        Screen.switch_frame()
+        
+    def go_search(self):
+        Screen.current=1
+        Screen.switch_frame()
+        
+    def go_remove_choose(self):
+        Screen.current=5
+        Screen.switch_frame()
+        
+    def go_save(self):
+        Screen.current=2
+        Screen.switch_frame()
+          
 
 class SearchMenu(Screen):
     
@@ -84,7 +107,7 @@ class SearchMenu(Screen):
         
         self.grid_rowconfigure(5,weight=1)
         
-        self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT)
+        self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_back.grid(row=6,column=0,sticky="news")
         
         self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
@@ -92,6 +115,10 @@ class SearchMenu(Screen):
         
         self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT)
         self.btn_submit.grid(row=6,column=2,sticky="news")
+        
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()    
         
 
 class PrintFilters(tk.Frame):
@@ -148,8 +175,12 @@ class FileSaved(Screen):
         self.lbl_saved = tk.Label(self,text="File Saved.", font=TITLE_FONT)
         self.lbl_saved.grid(row=0,column=0,columnspan=3,sticky="news")
         
-        self.btn_edit_confirm = tk.Button(self,text="OK",font=BUTTON_FONT)
+        self.btn_edit_confirm = tk.Button(self,text="OK",font=BUTTON_FONT,command=self.go_main)
         self.btn_edit_confirm.grid(row=1,column=1)
+        
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()     
         
         
 class ChooseEdit(Screen):
@@ -170,11 +201,19 @@ class ChooseEdit(Screen):
         self.menu = tk.OptionMenu(self, self.tkvar, *options)
         self.menu.grid(row = 1, column = 1)        
         
-        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT)
+        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_cancel.grid(row=2,column=0,sticky="news")        
         
-        self.btn_edit_choose = tk.Button(self,text="Confirm",font=BUTTON_FONT)
-        self.btn_edit_choose.grid(row=2,column=2,sticky="news")   
+        self.btn_edit_choose = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_add)
+        self.btn_edit_choose.grid(row=2,column=2,sticky="news") 
+        
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()
+        
+    def go_add(self):
+        Screen.current=4
+        Screen.switch_frame()    
         
         
 class AddEdit(Screen):
@@ -262,7 +301,7 @@ class AddEdit(Screen):
         self.scr_add_edit = ScrolledText(self,width=40,height=8)
         self.scr_add_edit.grid(row=7,column=0,columnspan=3,sticky="news") 
         
-        self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT)
+        self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_back.grid(row=8,column=0,sticky="news")
         
         self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
@@ -270,6 +309,10 @@ class AddEdit(Screen):
         
         self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT)
         self.btn_submit.grid(row=8,column=2,sticky="news")
+        
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()    
         
         
 class ChooseRemove(Screen):
@@ -290,11 +333,19 @@ class ChooseRemove(Screen):
         self.menu = tk.OptionMenu(self, self.tkvar, *options)
         self.menu.grid(row = 1, column = 1)        
         
-        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT)
+        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_cancel.grid(row=2,column=0,sticky="news")        
         
-        self.btn_remove_choose = tk.Button(self,text="Confirm",font=BUTTON_FONT)
+        self.btn_remove_choose = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_remove)
         self.btn_remove_choose.grid(row=2,column=2,sticky="news") 
+    
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()
+        
+    def go_remove(self):
+        Screen.current=6
+        Screen.switch_frame()    
         
               
 class ConfirmRemove(Screen):
@@ -315,11 +366,19 @@ class ConfirmRemove(Screen):
         self.scr_delete = ScrolledText(self,width=40,height=8)
         self.scr_delete.grid(row=2,column=0,columnspan=3,sticky="news")
         
-        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT)
+        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_remove_choose)
         self.btn_cancel.grid(row=3,column=0,sticky="news")        
         
-        self.btn_remove_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT)
-        self.btn_remove_confirm.grid(row=3,column=2,sticky="news")         
+        self.btn_remove_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_main)
+        self.btn_remove_confirm.grid(row=3,column=2,sticky="news")  
+        
+    def go_main(self):
+        Screen.current=0
+        Screen.switch_frame()    
+        
+    def go_remove_choose(self):
+        Screen.current=5
+        Screen.switch_frame()    
                   
 
 #===[ Global Function(s) ]===
@@ -336,29 +395,6 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
     
-    '''
-    search_menu = SearchMenu()
-    search_menu.grid(row=0,column=0,sticky="news")
-    
-    file_saved = FileSaved()
-    file_saved.grid(row=0,column=0,sticky="news")
-    
-    choose_edit = ChooseEdit()
-    choose_edit.grid(row=0,column=0,sticky="news")    
-    
-    add_edit = AddEdit()
-    add_edit.grid(row=0,column=0,sticky="news")
-    
-    choose_remove = ChooseRemove()
-    choose_remove.grid(row=0,column=0,sticky="news")   
-    
-    confirm_remove = ConfirmRemove()
-    confirm_remove.grid(row=0,column=0,sticky="news")  
-    
-    main_menu = MainMenu()
-    main_menu.grid(row=0,column=0,sticky="news")'''
-    
-    
     screens = [MainMenu(), SearchMenu(), FileSaved(), ChooseEdit(), AddEdit(), ChooseRemove(), ConfirmRemove()]
     screens[0].grid(row=0,column=0,sticky="news")
     screens[1].grid(row=0,column=0,sticky="news")
@@ -370,5 +406,4 @@ if __name__ == "__main__":
    
    
     screens[0].tkraise()
-    #main_menu.tkraise()
     root.mainloop()
