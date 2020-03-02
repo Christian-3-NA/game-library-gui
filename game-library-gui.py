@@ -8,6 +8,7 @@
 import pickle
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+from tkinter import messagebox
 #===[ Constant(s) ]===
 TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
@@ -52,21 +53,18 @@ class MainMenu(Screen):
         self.btn_save.grid(row=5,column=1)  
     
     def go_add(self):
+        self.going_add = True
         Screen.current=2
         Screen.switch_frame()
         
     def go_edit(self):
+        self.going_add = False
         pop_up = tk.Tk()
         pop_up.title("Edit")
         
         frm_edit_list=ChooseEdit(pop_up)
         frm_edit_list.grid(row=0,column=0)
-        
-        #screens[3].tkraise()
-        
-        #Screen.current=3
-        #Screen.switch_frame()
-        
+
     def go_search(self):
         Screen.current=1
         Screen.switch_frame()
@@ -233,14 +231,13 @@ class ChooseEdit(tk.Frame):
         else:
             for i in range(len(self.options)):
                 if self.tkvar.get() == self.options[i]:
-                    screens[2].edit_key = i
+                    screens[2].edit_key = i            
                     break
-            
-            
+                
             Screen.current=2
             screens[Screen.current].update()
             Screen.switch_frame()
-            self.parent.destroy
+            self.parent.destroy()
         
         
 class AddEdit(Screen):
@@ -248,6 +245,7 @@ class AddEdit(Screen):
     def __init__(self):
         Screen.__init__(self)
         self.edit_key = 0
+        self.button_checked = 0
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -314,13 +312,13 @@ class AddEdit(Screen):
         self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
         self.chk_beaten.grid(row=4,column=2,sticky="nsw")  
         
-        self.lbl_edit_mode = tk.Label(self,text="Game Modes:")
+        self.lbl_edit_mode = tk.Label(self,text="# of Players:")
         self.lbl_edit_mode.grid(row=5,column=0,sticky="sw")
         
-        options = ["One Player", "Two Player", "Three", "Four Player"]
+        self.options = ["1", "2", "3", "4"]
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options[0])
-        self.menu = tk.OptionMenu(self, self.tkvar, *options)
+        self.tkvar.set(self.options[0])
+        self.menu = tk.OptionMenu(self, self.tkvar, *self.options)
         self.menu.grid(row = 5, column = 1)          
         
         self.lbl_edit_notes = tk.Label(self,text="Notes:")
@@ -332,10 +330,10 @@ class AddEdit(Screen):
         self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_back.grid(row=8,column=0,sticky="news")
         
-        self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
+        self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT,command=self.reset)
         self.btn_reset.grid(row=8,column=1,sticky="news")
         
-        self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT)
+        self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT,command=self.submit)
         self.btn_submit.grid(row=8,column=2,sticky="news")
         
     def update(self):
@@ -344,9 +342,86 @@ class AddEdit(Screen):
         self.ent_edit_genre.delete(0, "end")
         self.ent_edit_genre.insert(0, entry[0])
         
+        self.ent_edit_title.delete(0, "end")
+        self.ent_edit_title.insert(0, entry[1])
+        
+        self.ent_edit_developer.delete(0, "end")
+        self.ent_edit_developer.insert(0, entry[2])
+        
+        self.ent_edit_publisher.delete(0, "end")
+        self.ent_edit_publisher.insert(0, entry[3])
+        
+        self.ent_edit_system.delete(0, "end")
+        self.ent_edit_system.insert(0, entry[4])
+        
+        self.ent_edit_release.delete(0, "end")
+        self.ent_edit_release.insert(0, entry[5])
+        
+        self.ent_edit_rating.delete(0, "end")
+        self.ent_edit_rating.insert(0, entry[6])
+        
+        self.ent_edit_price.delete(0, "end")
+        self.ent_edit_price.insert(0, entry[8])  
+        
+        self.ent_edit_purchase.delete(0, "end")
+        self.ent_edit_purchase.insert(0, entry[10])
+        
+        self.tkvar.set(self.options[int(entry[7])-1])
+        
+        if entry[9] == "Yes":
+            self.button_checked = 1
+            self.chk_beaten.toggle()
+            
+        self.scr_add_edit.delete(0.0, "end")
+        self.scr_add_edit.insert(0.0, entry[11])        
+
+        
     def go_main(self):
+        self.reset()
+        
         Screen.current=0
-        Screen.switch_frame()    
+        Screen.switch_frame() 
+        
+    def reset(self):
+        self.ent_edit_genre.delete(0, "end")
+        self.ent_edit_title.delete(0, "end")
+        self.ent_edit_developer.delete(0, "end")
+        self.ent_edit_publisher.delete(0, "end")
+        self.ent_edit_system.delete(0, "end")
+        self.ent_edit_release.delete(0, "end")
+        self.ent_edit_rating.delete(0, "end")
+        self.ent_edit_price.delete(0, "end")
+        self.ent_edit_purchase.delete(0, "end")
+        self.tkvar.set(self.options[0])
+        if self.button_checked == 1:
+            self.button_checked = 0
+            self.chk_beaten.toggle()
+        self.scr_add_edit.delete(0.0, "end")
+
+    def submit(self):
+        entry = []
+        entry.append(self.ent_edit_genre.get())
+        entry.append(self.ent_edit_title.get())
+        entry.append(self.ent_edit_developer.get())
+        entry.append(self.ent_edit_publisher.get())
+        entry.append(self.ent_edit_system.get())
+        entry.append(self.ent_edit_release.get())
+        entry.append(self.ent_edit_rating.get())
+        entry.append(self.tkvar.get())                 #self.options.get())
+        entry.append(self.ent_edit_price.get())
+        entry.append("Not Determined")                  #self.chk_beaten.get())
+        entry.append(self.ent_edit_purchase.get())
+        entry.append(self.scr_add_edit.get(0.0,"end"))
+        
+        if screens[0].going_add == False:
+            games[self.edit_key] = entry
+            messagebox.showinfo(message="Entry has been edited.")
+        else:
+            games[len(games)+1] = entry
+            messagebox.showinfo(message="Entry has been added.")
+        
+        self.reset()
+        self.go_main()
         
         
 class ChooseRemove(tk.Frame):
