@@ -49,7 +49,7 @@ class MainMenu(Screen):
         self.btn_remove = tk.Button(self,text="Remove",font=BUTTON_FONT,command=self.go_remove_choose)
         self.btn_remove.grid(row=4,column=1)
         
-        self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT)    #,command=self.go_save
+        self.btn_save = tk.Button(self,text="Save",font=BUTTON_FONT,command=self.save)    #,command=self.go_save
         self.btn_save.grid(row=5,column=1)  
     
     def go_add(self):
@@ -78,6 +78,13 @@ class MainMenu(Screen):
         
         #Screen.current=5
         #Screen.switch_frame()
+        
+    def save(self):
+        datafile = open("game_library.pickle", "wb")
+        pickle.dump(games, datafile)
+        datafile.close()
+        messagebox.showinfo(message="Data Saved!")
+        
         
     '''def go_save(self):
         Screen.current=2
@@ -423,8 +430,54 @@ class AddEdit(Screen):
         self.reset()
         self.go_main()
         
-        
+ 
 class ChooseRemove(tk.Frame):
+    
+    def __init__(self, parent):
+        tk.Frame.__init__(self, master=parent)
+        self.parent = parent
+        self.delete_key = 0
+        
+        #self.grid_columnconfigure(0, weight=1)
+        #self.grid_columnconfigure(1, weight=1)
+        #self.grid_columnconfigure(2, weight=1)
+        
+        self.lbl_edit_ask = tk.Label(self,text="Which Title to Delete?", font=TITLE_FONT)
+        self.lbl_edit_ask.grid(row=0,column=0,columnspan=3,sticky="news")
+        
+        self.options = ["Select a title."]
+        for key in games.keys():
+            self.options.append(games[key][1])
+        self.tkvar = tk.StringVar(self)
+        self.tkvar.set(self.options[0])
+        self.menu = tk.OptionMenu(self, self.tkvar, *self.options)
+        self.menu.grid(row = 1, column = 0, columnspan=3)        
+        
+        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.cancel)
+        self.btn_cancel.grid(row=2,column=0,sticky="news")        
+        
+        self.btn_edit_choose = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_remove)
+        self.btn_edit_choose.grid(row=2,column=2,sticky="news")       
+        
+    def cancel(self):
+        self.parent.destroy()
+        
+    def go_remove(self):
+        if self.tkvar.get() == self.options[0]:
+            pass
+        else:
+            for i in range(len(self.options)):
+                if self.tkvar.get() == self.options[i]:
+                    screens[3].delete_key = i            
+                    break
+                
+            Screen.current=3
+            screens[Screen.current].update()
+            Screen.switch_frame()
+            self.parent.destroy()
+    
+    
+'''class ChooseRemove(tk.Frame):
     
     def __init__(self, parent):
         tk.Frame.__init__(self, master=parent)
@@ -452,15 +505,16 @@ class ChooseRemove(tk.Frame):
     def cancel(self):
         self.parent.destroy()
         
-    '''def go_remove(self):
+    def go_remove(self):
         Screen.current=6
-        Screen.switch_frame()'''    
+        Screen.switch_frame()    
         
-              
+'''              
 class ConfirmRemove(Screen):
     
     def __init__(self):
         Screen.__init__(self)
+        self.delete_key = 0
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -475,21 +529,26 @@ class ConfirmRemove(Screen):
         self.scr_delete = ScrolledText(self,width=40,height=8)
         self.scr_delete.grid(row=2,column=0,columnspan=3,sticky="news")
         
-        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_remove_choose)
+        self.btn_cancel = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.cancel)
         self.btn_cancel.grid(row=3,column=0,sticky="news")        
         
-        self.btn_remove_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.go_main)
-        self.btn_remove_confirm.grid(row=3,column=2,sticky="news")  
+        self.btn_remove_confirm = tk.Button(self,text="Confirm",font=BUTTON_FONT,command=self.confirm)
+        self.btn_remove_confirm.grid(row=3,column=2,sticky="news")
         
-    def go_main(self):
+    def update(self):
+        entry = games[self.delete_key]
+        self.scr_delete.delete(0.0, "end")
+        to_print = "Title:        " + entry[0] + "\nGenre:        " + entry[1] + "\nDeveloper:    " + entry[2] + "\nPublisher:    " + entry[3] +"\nSystem:       " + entry[4] + "\nRelease Date: " + entry[5] + "\nRating:       " + entry[6] + "\n# of Players: " + entry[7] +"\nPrice:        " + entry[8] + "\nBeaten?:      " + entry[9] + "\nPurchase Date:" + entry[10] + "\nNotes:        " + entry[11]
+        self.scr_delete.insert(0.0, to_print)     
+        
+    def confirm(self):
         Screen.current=0
-        Screen.switch_frame()    
+        Screen.switch_frame()
         
-    def go_remove_choose(self):
-        Screen.current=5
-        Screen.switch_frame()    
+    def cancel(self):
+        Screen.current=0
+        Screen.switch_frame()   
                   
-
 #===[ Global Function(s) ]===
 
 #===[ Main ]===
