@@ -106,8 +106,11 @@ class SearchMenu(Screen):
         self.lbl_search_by = tk.Label(self,text="Search by:")
         self.lbl_search_by.grid(row=1,column=0,sticky="sw")
         
-        self.ent_search_by = tk.Entry(self)
-        self.ent_search_by.grid(row=2,column=0,sticky="nw")           
+        self.options = ["All", "Genre", "Title", "Developer", "Publisher", "Console", "Release Year", "Rating", "# of Players", "Price", "Beaten?", "Purchase Date", "Notes"]
+        self.tkvar = tk.StringVar(self)
+        self.tkvar.set(self.options[0])
+        self.menu = tk.OptionMenu(self, self.tkvar, *self.options)
+        self.menu.grid(row=2,column=0,sticky="nw")           
         
         self.lbl_search_for = tk.Label(self,text="Search for:")
         self.lbl_search_for.grid(row=3,column=0,sticky="sw")
@@ -129,56 +132,176 @@ class SearchMenu(Screen):
         self.btn_back = tk.Button(self,text="Back",font=BUTTON_FONT,command=self.go_main)
         self.btn_back.grid(row=6,column=0,sticky="news")
         
-        self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT)
+        self.btn_reset = tk.Button(self,text="Reset",font=BUTTON_FONT,command=self.clear)
         self.btn_reset.grid(row=6,column=1,sticky="news")
         
-        self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT)
+        self.btn_submit = tk.Button(self,text="Submit",font=BUTTON_FONT,command=self.submit_search)
         self.btn_submit.grid(row=6,column=2,sticky="news")
+        
+        for key in games.keys():
+            entry = games[key]
+            self.filter_print(entry)
         
     def go_main(self):
         Screen.current=0
-        Screen.switch_frame()    
+        Screen.switch_frame() 
         
+    def filter_print(self, entry):
+        if self.frm_filters.genre_var.get() == True:
+            msg = entry[1]+"\n"
+            self.scr_search_results.insert("insert", msg)
+        if self.frm_filters.title_var.get() == True:
+            msg = entry[0]+"\n"
+            self.scr_search_results.insert("insert", msg)
+        if self.frm_filters.company_var.get() == True:
+            msg = entry[2]+"\n"
+            self.scr_search_results.insert("insert", msg)            
+        if self.frm_filters.publisher_var.get() == True:
+            msg = entry[3]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.release_var.get() == True:
+            msg = entry[5]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.console_var.get() == True:
+            msg = entry[4]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.rating_var.get() == True:
+            msg = entry[6]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.player_var.get() == True:
+            msg = entry[7]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.price_var.get() == True:
+            msg = entry[8]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.beaten_var.get() == True:
+            msg = entry[9]+"\n"
+            self.scr_search_results.insert("insert", msg)  
+        if self.frm_filters.purchase_var.get() == True:
+            msg = entry[10]+"\n"
+            self.scr_search_results.insert("insert", msg) 
+        if self.frm_filters.notes_var.get() == True:
+            msg = entry[11]+"\n"
+            self.scr_search_results.insert("insert", msg)          
+        msg = "------------------------------------------------------------\n"
+        self.scr_search_results.insert("insert", msg)
+        
+    def clear(self):
+        self.frm_filters.genre_var.set(False)
+        self.frm_filters.title_var.set(False)
+        self.frm_filters.company_var.set(False)
+        self.frm_filters.publisher_var.set(False)
+        self.frm_filters.release_var.set(False)
+        self.frm_filters.console_var.set(False)
+        self.frm_filters.rating_var.set(False)
+        self.frm_filters.player_var.set(False)
+        self.frm_filters.price_var.set(False)
+        self.frm_filters.beaten_var.set(False)
+        self.frm_filters.purchase_var.set(False)
+        self.frm_filters.notes_var.set(False)
+        self.scr_search_results.delete(0.0, "end")
+        
+    def submit_search(self):
+        self.scr_search_results.delete(0.0, "end")
+        self.print_search()
+            
+    def print_search(self):
+        self.scr_search_results.delete(0.0, "end")
+        keyword = self.ent_search_for.get()
+        for key in games.keys():
+            entry=games[key]
+            if self.tkvar.get() == self.options[0]:
+                self.filter_print(entry)
+            if self.tkvar.get() == self.options[1]:
+                if keyword in entry[0]:
+                    self.filter_print(entry)
+            if self.tkvar.get() == self.options[2]:
+                if keyword in entry[1]:
+                    self.filter_print(entry) 
+            if self.tkvar.get() == self.options[3]:
+                if keyword in entry[2]:
+                    self.filter_print(entry) 
+            if self.tkvar.get() == self.options[4]:
+                if keyword in entry[3]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[5]:
+                if keyword in entry[4]:
+                    self.filter_print(entry)   
+            if self.tkvar.get() == self.options[6]:
+                if keyword in entry[5]:
+                    self.filter_print(entry)
+            if self.tkvar.get() == self.options[7]:
+                if keyword in entry[6]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[8]:
+                if keyword in entry[7]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[9]:
+                if keyword in entry[8]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[10]:
+                if keyword in entry[9]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[11]:
+                if keyword in entry[10]:
+                    self.filter_print(entry)                    
+            if self.tkvar.get() == self.options[12]:
+                if keyword in entry[11]:
+                    self.filter_print(entry) 
+                    
 
 class PrintFilters(tk.Frame):
     
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         
-        self.chk_title = tk.Checkbutton(self,text="Title")
+        self.genre_var = tk.BooleanVar(self, True)
+        self.title_var = tk.BooleanVar(self, True)
+        self.company_var = tk.BooleanVar(self, True)
+        self.publisher_var = tk.BooleanVar(self, True)
+        self.release_var = tk.BooleanVar(self, True)
+        self.console_var = tk.BooleanVar(self, True)
+        self.rating_var = tk.BooleanVar(self, True)
+        self.player_var = tk.BooleanVar(self, True)
+        self.price_var = tk.BooleanVar(self, True)
+        self.beaten_var = tk.BooleanVar(self, True)
+        self.purchase_var = tk.BooleanVar(self, True)
+        self.notes_var = tk.BooleanVar(self, True)
+        
+        self.chk_title = tk.Checkbutton(self,text="Title",variable=self.genre_var)
         self.chk_title.grid(row=0,column=0,sticky="nsw")
         
-        self.chk_genre = tk.Checkbutton(self,text="Genre")
+        self.chk_genre = tk.Checkbutton(self,text="Genre",variable=self.title_var)
         self.chk_genre.grid(row=0,column=1,sticky="nsw")  
         
-        self.chk_company = tk.Checkbutton(self,text="Company")
+        self.chk_company = tk.Checkbutton(self,text="Company",variable=self.company_var)
         self.chk_company.grid(row=0,column=2,sticky="nsw")        
         
-        self.chk_publisher = tk.Checkbutton(self,text="Publisher")
+        self.chk_publisher = tk.Checkbutton(self,text="Publisher",variable=self.publisher_var)
         self.chk_publisher.grid(row=1,column=0,sticky="nsw")        
         
-        self.chk_release_year = tk.Checkbutton(self,text="Release Year")
+        self.chk_release_year = tk.Checkbutton(self,text="Release Year",variable=self.release_var)
         self.chk_release_year.grid(row=1,column=1,sticky="nsw")        
         
-        self.chk_console = tk.Checkbutton(self,text="Console")
+        self.chk_console = tk.Checkbutton(self,text="Console",variable=self.console_var)
         self.chk_console.grid(row=1,column=2,sticky="nsw")        
         
-        self.chk_rating = tk.Checkbutton(self,text="Rating")
+        self.chk_rating = tk.Checkbutton(self,text="Rating",variable=self.rating_var)
         self.chk_rating.grid(row=2,column=0,sticky="nsw")
         
-        self.chk_single_multi = tk.Checkbutton(self,text="Single/Multi Player")
+        self.chk_single_multi = tk.Checkbutton(self,text="Single/Multi Player",variable=self.player_var)
         self.chk_single_multi.grid(row=2,column=1,sticky="nsw")         
         
-        self.chk_price = tk.Checkbutton(self,text="Price")
+        self.chk_price = tk.Checkbutton(self,text="Price",variable=self.price_var)
         self.chk_price.grid(row=2,column=2,sticky="nsw")
         
-        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.beaten_var)
         self.chk_beaten.grid(row=3,column=0,sticky="nsw")         
         
-        self.chk_purchase_date = tk.Checkbutton(self,text="Date Purchase")
+        self.chk_purchase_date = tk.Checkbutton(self,text="Date Purchase",variable=self.purchase_var)
         self.chk_purchase_date.grid(row=3,column=1,sticky="nsw")
         
-        self.chk_notes = tk.Checkbutton(self,text="Notes")
+        self.chk_notes = tk.Checkbutton(self,text="Notes",variable=self.notes_var)
         self.chk_notes.grid(row=3,column=2,sticky="nsw")           
         
 
@@ -234,7 +357,11 @@ class ChooseEdit(tk.Frame):
         
     def go_add_edit(self):
         if self.tkvar.get() == self.options[0]:
-            pass
+            pop_up = tk.Tk()
+            pop_up.title("Error")
+            msg="ERROR, choose a title"
+            frm_error=ErrorMessage(pop_up, msg)
+            frm_error.grid(row=0,column=0)            
         else:
             for i in range(len(self.options)):
                 if self.tkvar.get() == self.options[i]:
@@ -253,6 +380,7 @@ class AddEdit(Screen):
         Screen.__init__(self)
         self.edit_key = 0
         self.button_checked = 0
+        self.check_var = tk.BooleanVar(self, False)
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
@@ -316,7 +444,7 @@ class AddEdit(Screen):
         self.ent_edit_purchase = tk.Entry(self)
         self.ent_edit_purchase.grid(row=4,column=1,sticky="nw")        
         
-        self.chk_beaten = tk.Checkbutton(self,text="Beaten?")
+        self.chk_beaten = tk.Checkbutton(self,text="Beaten?",variable=self.check_var)
         self.chk_beaten.grid(row=4,column=2,sticky="nsw")  
         
         self.lbl_edit_mode = tk.Label(self,text="# of Players:")
@@ -378,7 +506,7 @@ class AddEdit(Screen):
         if entry[9] == "Yes":
             self.button_checked = 1
             self.chk_beaten.toggle()
-            
+                
         self.scr_add_edit.delete(0.0, "end")
         self.scr_add_edit.insert(0.0, entry[11])        
 
@@ -400,11 +528,10 @@ class AddEdit(Screen):
         self.ent_edit_price.delete(0, "end")
         self.ent_edit_purchase.delete(0, "end")
         self.tkvar.set(self.options[0])
-        if self.button_checked == 1:
-            self.button_checked = 0
+        if self.check_var == True:
             self.chk_beaten.toggle()
-        self.scr_add_edit.delete(0.0, "end")
-
+        self.scr_add_edit.delete(0.0, "end")          
+        
     def submit(self):
         entry = []
         entry.append(self.ent_edit_genre.get())
@@ -416,10 +543,13 @@ class AddEdit(Screen):
         entry.append(self.ent_edit_rating.get())
         entry.append(self.tkvar.get())                 #self.options.get())
         entry.append(self.ent_edit_price.get())
-        entry.append("Not Determined")                  #self.chk_beaten.get())
+        #entry.append("Not Determined")
+        if self.check_var.get() == True:
+            entry.append("Yes")
+        else:
+            entry.append("No")
         entry.append(self.ent_edit_purchase.get())
         entry.append(self.scr_add_edit.get(0.0,"end"))
-        
         if screens[0].going_add == False:
             games[self.edit_key] = entry
             messagebox.showinfo(message="Entry has been edited.")
@@ -464,7 +594,11 @@ class ChooseRemove(tk.Frame):
         
     def go_remove(self):
         if self.tkvar.get() == self.options[0]:
-            pass
+            pop_up = tk.Tk()
+            pop_up.title("Error")
+            msg="ERROR, choose a title"
+            frm_error=ErrorMessage(pop_up, msg)
+            frm_error.grid(row=0,column=0)    
         else:
             for i in range(len(self.options)):
                 if self.tkvar.get() == self.options[i]:
@@ -541,13 +675,30 @@ class ConfirmRemove(Screen):
         to_print = "Title:        " + entry[0] + "\nGenre:        " + entry[1] + "\nDeveloper:    " + entry[2] + "\nPublisher:    " + entry[3] +"\nSystem:       " + entry[4] + "\nRelease Date: " + entry[5] + "\nRating:       " + entry[6] + "\n# of Players: " + entry[7] +"\nPrice:        " + entry[8] + "\nBeaten?:      " + entry[9] + "\nPurchase Date:" + entry[10] + "\nNotes:        " + entry[11]
         self.scr_delete.insert(0.0, to_print)     
         
-    def confirm(self):
+    def confirm(self):      
+        for keys in range(1, len(games)+1):
+            if keys >= self.delete_key and keys != len(games):
+                games[keys] = games[keys+1]
+            if keys == len(games):
+                games.pop(keys)  
+                
+        messagebox.showinfo(message="Entry has been deleted.")
         Screen.current=0
         Screen.switch_frame()
         
     def cancel(self):
         Screen.current=0
-        Screen.switch_frame()   
+        Screen.switch_frame()  
+        
+class ErrorMessage(tk.Frame):
+    
+    def __init__(self,parent,msg="Generic"):
+        tk.Frame.__init__(self,master=parent)
+        self.parent = parent
+        self.lbl_continue = tk.Label(self,text=msg)
+        self.lbl_continue.grid(row=0,column=0)
+        self.btn_ok=tk.Button(self,text="OK",command=self.parent.destroy)
+        self.btn_ok.grid(row=0,column=1)
                   
 #===[ Global Function(s) ]===
 
